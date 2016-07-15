@@ -19,40 +19,23 @@
  */
 package com.javacreed.examples.concurrency.locks;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 /**
+ * Indicates that the action cannot be performed with given the current lock's state. For example if a thread obtains
+ * the lock once and then close it twice, the second close will throw a {@link IllegalActionKeyLockException} exception.
  *
  * @author Albert Attard
  */
-public class ReentrantThreadSingleKeyTest {
+public class IllegalActionKeyLockException extends RuntimeException {
+
+  private static final long serialVersionUID = 4896934727556167510L;
 
   /**
+   * Creates an instance of this exception
    *
-   * @throws Throwable
+   * @param message
+   *          the message (which can be {@code null})
    */
-  @Test(timeout = 10000)
-  public void test() throws Throwable {
-    final KeyLock<Integer> lock = new KeyLock<>();
-    Assert.assertTrue(lock.isEmpty());
-    Assert.assertEquals(0, lock.size());
-
-    final int size = 10;
-    final List<KeyLockGrant> grants = new ArrayList<>(size);
-    for (int i = 0; i < size; i++) {
-      grants.add(lock.grant(1));
-    }
-
-    for (final KeyLockGrant grant : grants) {
-      grant.close();
-    }
-
-    /* There should be no grants pending at the end of the test */
-    Assert.assertTrue(lock.isEmpty());
-    Assert.assertEquals(0, lock.size());
+  public IllegalActionKeyLockException(final String message) {
+    super(message);
   }
 }

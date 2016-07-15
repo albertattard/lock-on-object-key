@@ -21,15 +21,23 @@ package com.javacreed.examples.concurrency.locks;
 
 /**
  * The grant returned by the {@link KeyLock#grant(Object)} method after the thread is granted access. It is imperative
- * to close the grant when done as otherwise the key to which is bound will stay locked forever.
+ * to close the grant when done as otherwise the key to which is bound will stay locked forever. If the lock ends up in
+ * an invalid state due to any reason. For example if a thread obtains the lock once and then close it twice, the second
+ * close will throw a {@link IllegalActionKeyLockException} exception.
  *
  * @author Albert Attard
  */
 public abstract class KeyLockGrant implements AutoCloseable {
 
   /**
-   * Release the key
+   * Release the key.
+   * <p>
+   * If the lock ends up in an invalid state due to any reason. For example if a thread obtains the lock once and then
+   * close it twice, the second close will throw a {@link IllegalActionKeyLockException} exception.
+   *
+   * @throws IllegalActionKeyLockException
+   *           if the lock is in an invalid state
    */
   @Override
-  public abstract void close();
+  public abstract void close() throws IllegalActionKeyLockException;
 }
